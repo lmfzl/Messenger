@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="stormy_primary">#88BDF2</color>
+    <color name="stormy_dark">#384959</color>
+    <color name="stormy_light_bg">#BDDDFC</color>
+    <color name="stormy_secondary">#6A89A7</color>
+</resources>

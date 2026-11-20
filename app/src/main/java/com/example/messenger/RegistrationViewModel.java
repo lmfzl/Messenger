@@ -1,0 +1,43 @@
+package com.example.messenger;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class RegistrationViewModel extends ViewModel {
+    private FirebaseAuth auth;
+    MutableLiveData<FirebaseUser> user = new MutableLiveData<>();
+    MutableLiveData<String> error = new MutableLiveData<>();
+
+    public RegistrationViewModel() {
+        auth= FirebaseAuth.getInstance();
+        auth.addAuthStateListener(firebaseAuth ->{
+            if (firebaseAuth.getCurrentUser()!=null){
+                user.setValue(firebaseAuth.getCurrentUser());
+            }
+        });
+    }
+
+    public LiveData<FirebaseUser> getUser() {
+        return user;
+    }
+
+    public LiveData<String> getError() {
+        return error;
+    }
+
+    public void registerNewUser(
+            String email,
+            String password,
+            String name,
+            String lastName,
+            int age){
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnFailureListener( e -> {
+                    error.setValue(e.getMessage());
+                });
+    }
+}
