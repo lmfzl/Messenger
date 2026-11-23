@@ -13,22 +13,41 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class UsersActivity extends AppCompatActivity {
     private UsersViewModel usersViewModel;
+    private UsersAdapter usersAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.enableEdgeToEdge(getWindow());
         setContentView(R.layout.activity_users);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.recyclerViewUsers), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        initViews();
         usersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
+        recyclerView.setAdapter(usersAdapter);
         observeViewModel();
+        List<User> users = new ArrayList<>();
+        for (int i=0; i<5; i ++){
+            users.add(new User("id"+i, "name"+i, "lastName"+i, i, new Random().nextBoolean()));
+        }
+        usersAdapter.setUserList(users);
+    }
+
+    private void initViews(){
+        recyclerView = findViewById(R.id.recyclerViewUsers);
+        usersAdapter = new UsersAdapter();
     }
 
     private void observeViewModel(){
