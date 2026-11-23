@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,11 +47,6 @@ public class UsersActivity extends AppCompatActivity {
         usersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
         recyclerView.setAdapter(usersAdapter);
         observeViewModel();
-        List<User> users = new ArrayList<>();
-        for (int i=0; i<5; i ++){
-            users.add(new User("id"+i, "name"+i, "lastName"+i, i, new Random().nextBoolean()));
-        }
-        usersAdapter.setUserList(users);
     }
 
     private void initViews(){
@@ -64,6 +60,9 @@ public class UsersActivity extends AppCompatActivity {
                 startActivity(LoginActivity.newIntent(this));
                 finish();
             }
+        });
+        usersViewModel.getUsers().observe(this, users -> {
+            usersAdapter.setUserList(users);
         });
     }
 
