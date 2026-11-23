@@ -12,4 +12,5 @@
     <string name="age_hint">Age:</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="logout">Logout</string>
+    <string name="hint_type_your_message">Type your message</string>
 </resources>
