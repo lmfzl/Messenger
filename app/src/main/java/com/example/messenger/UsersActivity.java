@@ -31,6 +31,9 @@ public class UsersActivity extends AppCompatActivity {
     private UsersViewModel usersViewModel;
     private UsersAdapter usersAdapter;
     private RecyclerView recyclerView;
+    private String currentUserId;
+    private String otherUserId;
+    private static final String EXTRA_CURRENT_USER_ID = "current_id";
 
 
     @Override
@@ -44,9 +47,11 @@ public class UsersActivity extends AppCompatActivity {
             return insets;
         });
         initViews();
+        currentUserId = getIntent().getStringExtra(EXTRA_CURRENT_USER_ID);
         usersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
         recyclerView.setAdapter(usersAdapter);
         observeViewModel();
+        setupClickListeners();
     }
 
     private void initViews(){
@@ -67,11 +72,20 @@ public class UsersActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners(){
-
+        usersAdapter.setOnUserClickListener(new UsersAdapter.OnUserClickListener() {
+            @Override
+            public void onUserClick(User user) {
+                Intent intent = ChatActivity.newIntent(UsersActivity.this, currentUserId, user.getId());
+                startActivity(intent);
+            }
+        });
     }
 
-    public static Intent newIntent(Context context){
-        return new Intent(context, UsersActivity.class);
+    public static Intent newIntent(Context context, String currentUserId){
+        Intent intent = new Intent(context, UsersActivity.class);
+        intent.putExtra(EXTRA_CURRENT_USER_ID, currentUserId);
+        return intent;
+
     }
 
     @Override
@@ -86,5 +100,17 @@ public class UsersActivity extends AppCompatActivity {
             usersViewModel.logout();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        usersViewModel.setUserOnline(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        usersViewModel.setUserOnline(false);
     }
 }

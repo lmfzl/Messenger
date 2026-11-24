@@ -57,10 +57,10 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void observeViewModel() {
-        registrationViewModel.getUser().observe(this, (regResult -> {
-            if (regResult != null) {
+        registrationViewModel.getUser().observe(this, (firebaseUser -> {
+            if (firebaseUser != null) {
                 Toast.makeText(this, SUCCESS, Toast.LENGTH_SHORT).show();
-                startActivity(UsersActivity.newIntent(this));
+                startActivity(UsersActivity.newIntent(this, firebaseUser.getUid()));
                 finish();
             }
         }));
